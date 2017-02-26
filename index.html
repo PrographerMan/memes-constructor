@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Made with Thimble</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--  <input id="cells" type="number" value="4">-->
+  <canvas width="500" height="500"></canvas>
+  <input type="text" oninput="W.drawScene(ctx);">
+  <input type="text" oninput="W.drawScene(ctx);">
+
+  <script>
+//    document.getElementsByTagName('canvas')[0].onmousemove = function(e){W.setImageCoordinates(m, e.clientX, e.clientY)}
+    var W = {
+      drawCaptions: function(context, fstText, sndText) {
+        context.textAlign="center";
+        context.font = "48px Impact";
+        context.lineWidth = 10;
+        context.strokeStyle = '#fff';
+        context.lineJoin = 'round';
+        
+        // верхний заголовок
+        context.strokeText(fstText, W.getCanvasHandle().width / 2,
+                                    100);
+        context.strokeText(sndText, W.getCanvasHandle().width / 2,
+                                    W.getCanvasHandle().height - 100);
+        
+        // нижний заголовок
+        context.fillText(fstText, W.getCanvasHandle().width / 2,
+                                  100);
+        
+        context.fillText(sndText, W.getCanvasHandle().width / 2,
+                                  W.getCanvasHandle().height - 100);
+      },
+      drawPriorityArray: [],
+      getCanvasHandle: function(){
+        return document.getElementsByTagName('canvas')[0]
+      },
+      context: function() {
+        var a = document.getElementsByTagName('canvas')[0];
+        return a = a.getContext('2d')
+      },
+      drawScene: function(context) {
+        context.clearRect(0,0,500,500);
+        for(var i = 0; i < W.drawPriorityArray.length; i++) {
+          context.drawImage(W.drawPriorityArray[i].img,
+                            W.drawPriorityArray[i].x,
+                            W.drawPriorityArray[i].y)
+        }
+        W.drawCaptions(ctx,
+                       document.getElementsByTagName('input')[0].value,
+                       document.getElementsByTagName('input')[1].value);
+      },
+      imageInit: function(url, x, y) {
+        var obj = {};
+            obj.img     = new Image();
+            obj.img.src = url;
+            obj.x       = x;
+            obj.y       = y; 
+        W.drawPriorityArray.push(obj);
+        return obj;
+      },
+      setImageCoordinates: function(obj, x, y) {
+        obj.x = x;
+        obj.y = y;
+        W.drawScene(ctx);
+      },
+      sceneConpose: function() {
+      }
+    }
+    var ctx = W.context();
+    var img1 = W.imageInit('http://placehold.it/500x500', 0, 0);
+    window.onload = function() {
+      /*W.setImageCoordinates(W.drawPriorityArray[0],0,0);
+      W.setImageCoordinates(W.drawPriorityArray[1],
+                            W.getCanvasHandle().width - W.drawPriorityArray[1].img.width,
+                            0);*/
+      W.drawScene(ctx);
+    }
+  </script>
+</body>
+</html>
