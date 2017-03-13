@@ -3,6 +3,13 @@
   padding: 0
 }
 
+@font-face {
+  font-family: "ImpactRegular";
+  src: url(fonts/ImpactRegular.woff) format("truetype");
+  font-style: normal;
+  font-weight: normal;
+}
+
 body {
   background: #474747;
   font-family: "Open Sans", sans-serif;
