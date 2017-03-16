@@ -20,25 +20,29 @@ var W = {
   },
   drawCaptions: function(context, fstText, sndText) {
     context.textAlign="center";
-    context.font = "48px ImpactRegular";
+    context.font = '48px ImpactRegular';
     context.lineWidth = 10;
     context.strokeStyle = '#fff';
     context.lineJoin = 'round';
 
+    
     var linesArray = fstText.split(' ');
     var linesArrayBottom = sndText.split(' ');
     
-    var newArray = ['','',''];
-    var newArrayBottom = ['','',''];
+    var newArray = [''];
+    var newArrayBottom = [''];
     
     var margin = 50;
     var marginBottom = 50;
     
     var correntElement = 0;
     var correntElementBottom = 0;
-
+    
+    var newFontSize = 48;
+    var maxLineWidth = 18;
+    
     for(var i = 0; i < linesArray.length; i++) {
-      if((newArray[correntElement] + linesArray[i]).length < 18) {
+      if((newArray[correntElement] + linesArray[i]).length < maxLineWidth) {
         newArray[correntElement] += (' ' + linesArray[i]);
       } else {
         newArray[correntElement + 1] = linesArray[i];
@@ -47,14 +51,14 @@ var W = {
     }
     
     for(var i = 0; i < linesArrayBottom.length; i++) {
-      if((newArrayBottom[correntElementBottom] + linesArrayBottom[i]).length < 18) {
+      if((newArrayBottom[correntElementBottom] + linesArrayBottom[i]).length < maxLineWidth) {
         newArrayBottom[correntElementBottom] += (' ' + linesArrayBottom[i]);
       } else {
         newArrayBottom[correntElementBottom + 1] = linesArrayBottom[i];
         correntElementBottom++;
       }
     }
-
+    
     for(var i = 0; i < newArray.length; i++) {
       if(!newArray[i]) break;
       context.strokeText(newArray[i],
@@ -67,38 +71,19 @@ var W = {
       margin += 50;
     }
     
+    marginBottom *= newArrayBottom.length;
     for(var i = 0; i < newArrayBottom.length; i++) {
       if(!newArrayBottom[i]) break;
       context.strokeText(newArrayBottom[i],
                          W.getCanvasHandle().width / 2,
-                         W.getCanvasHandle().height - marginBottom);
+                         W.getCanvasHandle().height + 34 - marginBottom);
 
       context.fillText(newArrayBottom[i],
                        W.getCanvasHandle().width / 2,
-                       W.getCanvasHandle().height - marginBottom);
-      //marginBottom * -1;
-      marginBottom += 50
+                       W.getCanvasHandle().height + 34 - marginBottom);
+      marginBottom -= 50
     }
 
-    // верхний заголовок
-    /*
-    context.strokeText(fstText,
-                       W.getCanvasHandle().width / 2,
-                       100);
-
-    context.fillText(fstText,
-                     W.getCanvasHandle().width / 2,
-                     100)
-    
-    // нижний заголовок
-    context.strokeText(sndText,
-                       W.getCanvasHandle().width / 2,
-                       W.getCanvasHandle().height - 100);
-
-
-    context.fillText(sndText,
-                     W.getCanvasHandle().width / 2,
-                     W.getCanvasHandle().height - 100);*/
   },
   drawPriorityArray: [],
   getCanvasHandle: function(){
