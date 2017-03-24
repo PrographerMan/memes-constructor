@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php require("pic.php") ?>
 <html>
   <head>
     <meta charset="utf-8">
@@ -15,10 +16,14 @@
           <a class="close" href="#">✖</a>
         </div>
         <div id="content-block" class="clr">
-          <a href="#"><img alt="Template" src="images/img1.png"></a>
-          <a href="#"><img alt="Template" src="images/img2.png"></a>
+		  <?php foreach (getPicArray() as &$pic) { ?>
+			<a href="#"><img alt="Template" src="images/<?=$pic?>"></a>
+		  <?php } ?>
+		  <!--
+		  <a href="#"><img alt="Template" src="images/img2.png"></a>
           <a href="#"><img alt="Template" src="images/img3.png"></a>
           <a href="#"><img alt="Template" src="images/img4.png"></a>
+		  -->
         </div>
       </div>
     </div>
