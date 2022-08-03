@@ -1,23 +1,19 @@
 var W = {
   uploadFile: function(evt) {
-    var files = evt.target.files;
-
-    for (var i = 0, f; f = files[i]; i++) {
-      var reader = new FileReader();
-
-      reader.onload = function() {
-        return function(e) {
-          var a = W.imageInit(reader.result, 0, 0);
-          W.drawScene(ctx);
-        };
-      }(f);
-
-      reader.readAsDataURL(f);
+    const image = evt.target.files[0];
+    let reader = new FileReader();
+    reader.onload = () => {
+      W.imageInit(reader.result, 0, 0);
+      W.drawScene(ctx);
     };
+
+    reader.readAsDataURL(image);
   },
+
   getById: function(e) {
     return e = document.getElementById(e);
   },
+
   drawCaptions: function(context, fstText, sndText) {
     context.textAlign="center";
     context.font = '48px ImpactRegular';
@@ -83,16 +79,19 @@ var W = {
                        W.getCanvasHandle().height + 34 - marginBottom);
       marginBottom -= 50
     }
-
   },
+
   drawPriorityArray: [],
+
   getCanvasHandle: function(){
     return document.getElementsByTagName('canvas')[0]
   },
+
   context: function() {
     var a = document.getElementsByTagName('canvas')[0];
     return a = a.getContext('2d')
   },
+
   drawScene: function(context) {
     context.clearRect(0,0,500,500);
     for(var i = 0; i < W.drawPriorityArray.length; i++) {
@@ -106,9 +105,10 @@ var W = {
                    W.getById('text1').value.toUpperCase(),
                    W.getById('text2').value.toUpperCase());
   },
+
   imageInit: function(url, x, y) {
     var obj     = {};
-    obj.img     = new Image();
+    obj.img     = new Image(W.getCanvasHandle().width, W.getCanvasHandle().height);
     obj.img.src = url;
     obj.x       = x;
     obj.y       = y; 
@@ -122,7 +122,7 @@ var W = {
   },
 }
 var ctx = W.context();
-var img1 = W.imageInit('http://placehold.it/500x500', 0, 0);
+var img1 = W.imageInit('https://placehold.jp/500x500.png', 0, 0);
 
 var content = document.getElementById('content-block');
 content = content.getElementsByTagName('img');
@@ -134,15 +134,4 @@ for(var i = 0; i < content.length; i++) {
     W.imageInit(this.src, 0, 0);
     W.drawScene(ctx);
   }, true)
-}
-setTimeout(function(){
-  var a = document.getElementsByClassName('details-bar')[0];
-  a.innerHTML = '';
-}, 1000)
-window.onload = function() {
-  /*W.setImageCoordinates(W.drawPriorityArray[0],0,0);
-      W.setImageCoordinates(W.drawPriorityArray[1],
-                            W.getCanvasHandle().width - W.drawPriorityArray[1].img.width,
-                            0);*/
-  W.drawScene(ctx);
 }
