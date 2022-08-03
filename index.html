@@ -16,14 +16,9 @@
           <a class="close" href="#">✖</a>
         </div>
         <div id="content-block" class="clr">
-		  <?php foreach (getPicArray() as &$pic) { ?>
-			<a href="#"><img alt="Template" src="images/<?=$pic?>"></a>
-		  <?php } ?>
-		  <!--
-		  <a href="#"><img alt="Template" src="images/img2.png"></a>
+		      <a href="#"><img alt="Template" src="images/img2.png"></a>
           <a href="#"><img alt="Template" src="images/img3.png"></a>
           <a href="#"><img alt="Template" src="images/img4.png"></a>
-		  -->
         </div>
       </div>
     </div>
@@ -37,8 +32,8 @@
       </div>
       <canvas id="canvas" width="500" height="500"></canvas>
       <div id="textes">
-        <input id="text1" type="text" oninput="W.drawScene(ctx);" placeholder="Верхний заголовок">
-        <input id="text2" type="text" oninput="W.drawScene(ctx);" placeholder="Нижний заголовок">
+        <input id="text1" type="text" placeholder="Верхний заголовок">
+        <input id="text2" type="text" placeholder="Нижний заголовок">
       </div>
     </div>
     <script src="script.js"></script>

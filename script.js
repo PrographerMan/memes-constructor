@@ -1,3 +1,15 @@
+class AppImage {
+  constructor(url, x, y) {
+    this.url = url;
+    this.img = new Image(W.getCanvasHandle().width, W.getCanvasHandle().height);
+    this.img.src = url; 
+    this.x = x;
+    this.y = y;
+
+    W.drawPriorityArray.push(this);
+  }
+}
+
 var W = {
   uploadFile: function(evt) {
     const image = evt.target.files[0];
@@ -10,8 +22,9 @@ var W = {
     reader.readAsDataURL(image);
   },
 
+  fileInput: document.getElementById('files'),
   topTextField: document.getElementById('text1'),
-  bottomTextField: document.getElementById('text1'),
+  bottomTextField: document.getElementById('text2'),
 
   drawCaptions: function(context, fstText, sndText) {
     context.textAlign="center";
@@ -103,33 +116,20 @@ var W = {
                    W.topTextField.value.toUpperCase(),
                    W.bottomTextField.value.toUpperCase());
   },
-
-  imageInit: function(url, x, y) {
-    var obj     = {};
-    obj.img     = new Image(W.getCanvasHandle().width, W.getCanvasHandle().height);
-    obj.img.src = url;
-    obj.x       = x;
-    obj.y       = y; 
-    W.drawPriorityArray.push(obj);
-    return obj;
-  },
-  setImageCoordinates: function(obj, x, y) {
-    obj.x = x;
-    obj.y = y;
-    W.drawScene(ctx);
-  },
 }
 var ctx = W.context();
-var img1 = W.imageInit('https://placehold.jp/500x500.png', 0, 0);
+var img1 = new AppImage('https://placehold.jp/500x500.png', 0, 0);
 
 var content = document.getElementById('content-block');
 content = content.getElementsByTagName('img');
 
-document.getElementById('files').addEventListener('change', W.uploadFile, false);
+W.fileInput.addEventListener('change', W.uploadFile, false);
+W.topTextField.addEventListener('input', () => W.drawScene(ctx), false);
+W.bottomTextField.addEventListener('input', () => W.drawScene(ctx), false);
 
 for(var i = 0; i < content.length; i++) {
   content[i].addEventListener('click', function() {
-    W.imageInit(this.src, 0, 0);
+    new AppImage(this.src, 0, 0);
     W.drawScene(ctx);
   }, true)
 }
