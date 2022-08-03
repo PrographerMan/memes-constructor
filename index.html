@@ -30,12 +30,12 @@
     <div id="top" class="clr">
       <span class="btn">О сайте</span>
     </div>
-    <div id="canvas">
+    <div class="canvas">
       <div id="btns">
         <input type="file" id="files" class="btn">
         <a href="#templates"><span class="btn">Выбрать шаблон</span></a>
       </div>
-      <canvas width="500" height="500"></canvas>
+      <canvas id="canvas" width="500" height="500"></canvas>
       <div id="textes">
         <input id="text1" type="text" oninput="W.drawScene(ctx);" placeholder="Верхний заголовок">
         <input id="text2" type="text" oninput="W.drawScene(ctx);" placeholder="Нижний заголовок">

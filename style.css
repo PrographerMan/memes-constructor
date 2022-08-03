@@ -19,7 +19,7 @@ body {
   background: #676767;
 }
 
-canvas {
+#canvas {
   display: block
 }
 
@@ -45,7 +45,7 @@ canvas {
   padding: 10px
 }
 
-#canvas {
+.canvas {
   text-align: center;
   border-radius: 3px;
   margin: 0 auto;

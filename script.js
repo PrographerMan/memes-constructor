@@ -10,9 +10,8 @@ var W = {
     reader.readAsDataURL(image);
   },
 
-  getById: function(e) {
-    return e = document.getElementById(e);
-  },
+  topTextField: document.getElementById('text1'),
+  bottomTextField: document.getElementById('text1'),
 
   drawCaptions: function(context, fstText, sndText) {
     context.textAlign="center";
@@ -84,12 +83,11 @@ var W = {
   drawPriorityArray: [],
 
   getCanvasHandle: function(){
-    return document.getElementsByTagName('canvas')[0]
+    return document.getElementById('canvas');
   },
 
   context: function() {
-    var a = document.getElementsByTagName('canvas')[0];
-    return a = a.getContext('2d')
+    return document.getElementById('canvas').getContext('2d');
   },
 
   drawScene: function(context) {
@@ -102,8 +100,8 @@ var W = {
                         500)
     }
     W.drawCaptions(ctx,
-                   W.getById('text1').value.toUpperCase(),
-                   W.getById('text2').value.toUpperCase());
+                   W.topTextField.value.toUpperCase(),
+                   W.bottomTextField.value.toUpperCase());
   },
 
   imageInit: function(url, x, y) {
