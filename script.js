@@ -1,7 +1,7 @@
 class AppImage {
   constructor(url, x, y) {
     this.url = url;
-    this.img = new Image(W.getCanvasHandle().width, W.getCanvasHandle().height);
+    this.img = new Image(W.сanvasElement.width, W.сanvasElement.height);
     this.img.src = url; 
     this.x = x;
     this.y = y;
@@ -11,28 +11,34 @@ class AppImage {
 }
 
 var W = {
+  templatesBlock: document.getElementById('templates'),
+  fileInput: document.getElementById('files'),
+  topTextField: document.getElementById('text1'),
+  bottomTextField: document.getElementById('text2'),
+  сanvasElement: document.getElementById('canvas'),
+  context: document.getElementById('canvas').getContext('2d'),
+
+  // массив изображений, которые рисуются
+  drawPriorityArray: [],
+
   uploadFile: function(evt) {
     const image = evt.target.files[0];
     let reader = new FileReader();
+    
     reader.onload = () => {
-      W.imageInit(reader.result, 0, 0);
-      W.drawScene(ctx);
+      new AppImage(reader.result, 0, 0);
+      W.drawScene();
     };
 
     reader.readAsDataURL(image);
   },
 
-  fileInput: document.getElementById('files'),
-  topTextField: document.getElementById('text1'),
-  bottomTextField: document.getElementById('text2'),
-
-  drawCaptions: function(context, fstText, sndText) {
-    context.textAlign="center";
-    context.font = '48px ImpactRegular';
-    context.lineWidth = 10;
-    context.strokeStyle = '#fff';
-    context.lineJoin = 'round';
-
+  drawCaptions: function(fstText, sndText) {
+    this.context.textAlign = 'center';
+    this.context.font = '48px ImpactRegular';
+    this.context.lineWidth = 10;
+    this.context.strokeStyle = '#fff';
+    this.context.lineJoin = 'round';
     
     var linesArray = fstText.split(' ');
     var linesArrayBottom = sndText.split(' ');
@@ -58,8 +64,8 @@ var W = {
       }
     }
     
-    for(var i = 0; i < linesArrayBottom.length; i++) {
-      if((newArrayBottom[correntElementBottom] + linesArrayBottom[i]).length < maxLineWidth) {
+    for (var i = 0; i < linesArrayBottom.length; i++) {
+      if ((newArrayBottom[correntElementBottom] + linesArrayBottom[i]).length < maxLineWidth) {
         newArrayBottom[correntElementBottom] += (' ' + linesArrayBottom[i]);
       } else {
         newArrayBottom[correntElementBottom + 1] = linesArrayBottom[i];
@@ -67,69 +73,57 @@ var W = {
       }
     }
     
-    for(var i = 0; i < newArray.length; i++) {
-      if(!newArray[i]) break;
-      context.strokeText(newArray[i],
-                         W.getCanvasHandle().width / 2,
+    for (var i = 0; i < newArray.length; i++) {
+      if (!newArray[i]) break;
+      this.context.strokeText(newArray[i],
+                         W.сanvasElement.width / 2,
                          margin);
 
-      context.fillText(newArray[i],
-                       W.getCanvasHandle().width / 2,
+      this.context.fillText(newArray[i],
+                       W.сanvasElement.width / 2,
                        margin);
       margin += 50;
     }
     
     marginBottom *= newArrayBottom.length;
-    for(var i = 0; i < newArrayBottom.length; i++) {
-      if(!newArrayBottom[i]) break;
-      context.strokeText(newArrayBottom[i],
-                         W.getCanvasHandle().width / 2,
-                         W.getCanvasHandle().height + 34 - marginBottom);
+    for (var i = 0; i < newArrayBottom.length; i++) {
+      if (!newArrayBottom[i]) break;
+      this.context.strokeText(newArrayBottom[i],
+                         W.сanvasElement.width / 2,
+                         W.сanvasElement.height + 34 - marginBottom);
 
-      context.fillText(newArrayBottom[i],
-                       W.getCanvasHandle().width / 2,
-                       W.getCanvasHandle().height + 34 - marginBottom);
+      this.context.fillText(newArrayBottom[i],
+                       W.сanvasElement.width / 2,
+                       W.сanvasElement.height + 34 - marginBottom);
       marginBottom -= 50
     }
   },
 
-  drawPriorityArray: [],
-
-  getCanvasHandle: function(){
-    return document.getElementById('canvas');
-  },
-
-  context: function() {
-    return document.getElementById('canvas').getContext('2d');
-  },
-
-  drawScene: function(context) {
-    context.clearRect(0,0,500,500);
-    for(var i = 0; i < W.drawPriorityArray.length; i++) {
-      context.drawImage(W.drawPriorityArray[i].img,
-                        W.drawPriorityArray[i].x,
-                        W.drawPriorityArray[i].y,
-                        500,
-                        500)
-    }
-    W.drawCaptions(ctx,
-                   W.topTextField.value.toUpperCase(),
+  drawScene: function() {
+    this.context.clearRect(0, 0, this.сanvasElement.width, this.сanvasElement.height);
+    
+    this.drawPriorityArray.forEach((image) => {
+      this.context.drawImage(image.img, image.x, image.y, 500, 500)
+    });
+    
+    W.drawCaptions(W.topTextField.value.toUpperCase(),
                    W.bottomTextField.value.toUpperCase());
   },
 }
-var ctx = W.context();
+
 var img1 = new AppImage('https://placehold.jp/500x500.png', 0, 0);
 
-var content = document.getElementById('content-block');
-content = content.getElementsByTagName('img');
+let templates = Array.prototype.slice.call(
+  W.templatesBlock.getElementsByTagName('img')
+);
+
+templates.forEach(template => {
+  template.addEventListener('click', () => {
+    new AppImage(template.src, 0, 0);
+    W.drawScene();   
+  }, true);
+});
 
 W.fileInput.addEventListener('change', W.uploadFile, false);
-W.topTextField.addEventListener('input', () => W.drawScene(ctx), false);
-W.bottomTextField.addEventListener('input', () => W.drawScene(ctx), false);
-
-for(var i = 0; i < content.length; i++) {
-  content[i].addEventListener('click', function() {
-    new AppImage(this.src, 0, 0);
-    W.drawScene(ctx);
-  }, true)
-}
+W.topTextField.addEventListener('input', () => W.drawScene(), false);
+W.bottomTextField.addEventListener('input', () => W.drawScene(), false);
