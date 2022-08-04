@@ -6,21 +6,29 @@ class AppImage {
     this.x = x;
     this.y = y;
 
-    W.drawPriorityArray.push(this);
+    W.objectsForDrawing.push(this);
   }
 }
 
 var W = {
-  maxLineWidth: 18,
+  maxLineWidth: 19,
+
   templatesBlock: document.getElementById('templates'),
+  
   fileInput: document.getElementById('files'),
+  
   topTextField: document.getElementById('text1'),
+  
   bottomTextField: document.getElementById('text2'),
+  
   сanvasElement: document.getElementById('canvas'),
+  
   context: document.getElementById('canvas').getContext('2d'),
 
-  // массив изображений, которые рисуются
-  drawPriorityArray: [],
+  /**
+   * Объекты для рисования
+   */
+  objectsForDrawing: [],
 
   uploadFile: function(event) {
     const image = event.target.files[0];
@@ -40,20 +48,23 @@ var W = {
       this.context.fillText(line, W.сanvasElement.width / 2, margin);
     }
 
-    const splitIntoLines = (wordsArray) => {
-      let linesArray = [''];
-      let rowIndex = 0;
+    const splitIntoLines = (words) => {
+      let lines = [''];
+      let lineIndex = 0;
 
-      wordsArray.forEach((word) => {
-        if ((linesArray[rowIndex] + word).length < W.maxLineWidth) {
-          linesArray[rowIndex] += ` ${word}`;
+      words.forEach((word) => {
+        // вмещается ли слово в строку
+        if ((lines[lineIndex] + word).length < W.maxLineWidth) {
+          lines[lineIndex] += ` ${word}`;
+        
+        // создадим новую строку
         } else {
-          linesArray.push(word);
-          rowIndex++;
+          lines.push(word);
+          lineIndex++;
         }
       });
 
-      return linesArray;
+      return lines;
     }
     
     const topCaptionWords = topFieldText.split(' ');
@@ -85,7 +96,7 @@ var W = {
   drawScene: function() {
     this.context.clearRect(0, 0, this.сanvasElement.width, this.сanvasElement.height);
     
-    this.drawPriorityArray.forEach((image) => {
+    this.objectsForDrawing.forEach((image) => {
       this.context.drawImage(image.img, image.x, image.y, 500, 500)
     });
     
@@ -95,9 +106,10 @@ var W = {
 }
 
 W.context.textAlign = 'center';
+W.context.fillStyle = '#fff';
 W.context.font = '48px ImpactRegular';
 W.context.lineWidth = 10;
-W.context.strokeStyle = '#fff';
+W.context.strokeStyle = '#000';
 W.context.lineJoin = 'round';
 
 var img1 = new AppImage('https://placehold.jp/500x500.png', 0, 0);
@@ -109,7 +121,7 @@ let templates = Array.prototype.slice.call(
 templates.forEach(template => {
   template.addEventListener('click', () => {
     new AppImage(template.src, 0, 0);
-    W.drawScene();   
+    W.drawScene();
   }, true);
 });
 

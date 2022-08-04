@@ -52,7 +52,7 @@ body {
   width: 500px;
 }
 
-#templates {
+#templates-modal {
   display: none;
 }
 
@@ -96,8 +96,8 @@ a {
   bottom: 2px
 }
 
-#templates:target {
-  display: block
+#templates-modal:target {
+  display: block !important
 }
 
 #modal-overlay {
