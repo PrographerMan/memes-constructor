@@ -22,8 +22,8 @@ var W = {
   // массив изображений, которые рисуются
   drawPriorityArray: [],
 
-  uploadFile: function(evt) {
-    const image = evt.target.files[0];
+  uploadFile: function(event) {
+    const image = event.target.files[0];
     let reader = new FileReader();
     
     reader.onload = () => {
@@ -34,52 +34,52 @@ var W = {
     reader.readAsDataURL(image);
   },
 
-  drawCaptions: function(fstText, sndText) {
+  drawCaptions: function(topFieldText, bottomFieldText) {
     const drawLine = (line, margin) => {
       this.context.strokeText(line, W.сanvasElement.width / 2, margin);
       this.context.fillText(line, W.сanvasElement.width / 2, margin);
     }
+
+    const splitIntoLines = (wordsArray) => {
+      let linesArray = [''];
+      let rowIndex = 0;
+
+      wordsArray.forEach((word) => {
+        if ((linesArray[rowIndex] + word).length < W.maxLineWidth) {
+          linesArray[rowIndex] += ` ${word}`;
+        } else {
+          linesArray.push(word);
+          rowIndex++;
+        }
+      });
+
+      return linesArray;
+    }
     
-    const topCaptionWords = fstText.split(' ');
-    const bottomCaptionWords = sndText.split(' ');
+    const topCaptionWords = topFieldText.split(' ');
+    const bottomCaptionWords = bottomFieldText.split(' ');
     
-    let topCaptionLines = [''];
-    let bottomCaptionLines = [''];
+    let topCaptionLines = splitIntoLines(topCaptionWords);
+    let bottomCaptionLines = splitIntoLines(bottomCaptionWords);
     
     let margin = 50;
     let marginBottom = 50;
     
-    let currentRow = 0;
-    let correntElementBottom = 0;
-
-    const splitIntoLines = (wordsArray, linesArray, lineIterator) => {
-      wordsArray.forEach((word) => {
-        if ((linesArray[lineIterator] + word).length < W.maxLineWidth) {
-          linesArray[lineIterator] += ` ${word}`;
-        } else {
-          linesArray.push(word);
-          lineIterator++;
-        }
-      });
-    }
-    
-    splitIntoLines(topCaptionWords, topCaptionLines, currentRow);
-    splitIntoLines(bottomCaptionWords, bottomCaptionLines, correntElementBottom);
-    
-    for (var i = 0; i < topCaptionLines.length; i++) {
-      if (!topCaptionLines[i]) break;
+    topCaptionLines.forEach((line) => {
+      if (!line) return;
       
-      drawLine(topCaptionLines[i], margin);
+      drawLine(line, margin);
       margin += 50;
-    }
+    });
     
     marginBottom *= bottomCaptionLines.length;
-    for (var i = 0; i < bottomCaptionLines.length; i++) {
-      if (!bottomCaptionLines[i]) break;
+    
+    bottomCaptionLines.forEach((line) => {
+      if (!line) return;
 
-      drawLine(bottomCaptionLines[i], W.сanvasElement.height + 34 - marginBottom);
+      drawLine(line, W.сanvasElement.height + 34 - marginBottom);
       marginBottom -= 50
-    }
+    })
   },
 
   drawScene: function() {
