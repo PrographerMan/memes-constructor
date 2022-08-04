@@ -11,6 +11,7 @@ class AppImage {
 }
 
 var W = {
+  maxLineWidth: 18,
   templatesBlock: document.getElementById('templates'),
   fileInput: document.getElementById('files'),
   topTextField: document.getElementById('text1'),
@@ -34,67 +35,49 @@ var W = {
   },
 
   drawCaptions: function(fstText, sndText) {
-    this.context.textAlign = 'center';
-    this.context.font = '48px ImpactRegular';
-    this.context.lineWidth = 10;
-    this.context.strokeStyle = '#fff';
-    this.context.lineJoin = 'round';
-    
-    var linesArray = fstText.split(' ');
-    var linesArrayBottom = sndText.split(' ');
-    
-    var newArray = [''];
-    var newArrayBottom = [''];
-    
-    var margin = 50;
-    var marginBottom = 50;
-    
-    var correntElement = 0;
-    var correntElementBottom = 0;
-    
-    var newFontSize = 48;
-    var maxLineWidth = 18;
-    
-    for(var i = 0; i < linesArray.length; i++) {
-      if((newArray[correntElement] + linesArray[i]).length < maxLineWidth) {
-        newArray[correntElement] += (' ' + linesArray[i]);
-      } else {
-        newArray[correntElement + 1] = linesArray[i];
-        correntElement++;
-      }
+    const drawLine = (line, margin) => {
+      this.context.strokeText(line, W.сanvasElement.width / 2, margin);
+      this.context.fillText(line, W.сanvasElement.width / 2, margin);
     }
     
-    for (var i = 0; i < linesArrayBottom.length; i++) {
-      if ((newArrayBottom[correntElementBottom] + linesArrayBottom[i]).length < maxLineWidth) {
-        newArrayBottom[correntElementBottom] += (' ' + linesArrayBottom[i]);
-      } else {
-        newArrayBottom[correntElementBottom + 1] = linesArrayBottom[i];
-        correntElementBottom++;
-      }
-    }
+    const topCaptionWords = fstText.split(' ');
+    const bottomCaptionWords = sndText.split(' ');
     
-    for (var i = 0; i < newArray.length; i++) {
-      if (!newArray[i]) break;
-      this.context.strokeText(newArray[i],
-                         W.сanvasElement.width / 2,
-                         margin);
+    let topCaptionLines = [''];
+    let bottomCaptionLines = [''];
+    
+    let margin = 50;
+    let marginBottom = 50;
+    
+    let currentRow = 0;
+    let correntElementBottom = 0;
 
-      this.context.fillText(newArray[i],
-                       W.сanvasElement.width / 2,
-                       margin);
+    const splitIntoLines = (wordsArray, linesArray, lineIterator) => {
+      wordsArray.forEach((word) => {
+        if ((linesArray[lineIterator] + word).length < W.maxLineWidth) {
+          linesArray[lineIterator] += ` ${word}`;
+        } else {
+          linesArray.push(word);
+          lineIterator++;
+        }
+      });
+    }
+    
+    splitIntoLines(topCaptionWords, topCaptionLines, currentRow);
+    splitIntoLines(bottomCaptionWords, bottomCaptionLines, correntElementBottom);
+    
+    for (var i = 0; i < topCaptionLines.length; i++) {
+      if (!topCaptionLines[i]) break;
+      
+      drawLine(topCaptionLines[i], margin);
       margin += 50;
     }
     
-    marginBottom *= newArrayBottom.length;
-    for (var i = 0; i < newArrayBottom.length; i++) {
-      if (!newArrayBottom[i]) break;
-      this.context.strokeText(newArrayBottom[i],
-                         W.сanvasElement.width / 2,
-                         W.сanvasElement.height + 34 - marginBottom);
+    marginBottom *= bottomCaptionLines.length;
+    for (var i = 0; i < bottomCaptionLines.length; i++) {
+      if (!bottomCaptionLines[i]) break;
 
-      this.context.fillText(newArrayBottom[i],
-                       W.сanvasElement.width / 2,
-                       W.сanvasElement.height + 34 - marginBottom);
+      drawLine(bottomCaptionLines[i], W.сanvasElement.height + 34 - marginBottom);
       marginBottom -= 50
     }
   },
@@ -110,6 +93,12 @@ var W = {
                    W.bottomTextField.value.toUpperCase());
   },
 }
+
+W.context.textAlign = 'center';
+W.context.font = '48px ImpactRegular';
+W.context.lineWidth = 10;
+W.context.strokeStyle = '#fff';
+W.context.lineJoin = 'round';
 
 var img1 = new AppImage('https://placehold.jp/500x500.png', 0, 0);
 
