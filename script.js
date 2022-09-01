@@ -42,6 +42,11 @@ var W = {
     reader.readAsDataURL(image);
   },
 
+  updateCaptionsFontSize: function(caption) {
+    this.context.font = `${48 - caption.length * 6}px ImpactRegular`;
+    this.maxLineWidth = 20 + caption.length * 6;
+  },
+
   drawCaptions: function(topFieldText, bottomFieldText) {
     const drawLine = (line, margin) => {
       this.context.strokeText(line, W.сanvasElement.width / 2, margin);
@@ -67,30 +72,34 @@ var W = {
       return lines;
     }
     
+    const lineHeight = 60;
     const topCaptionWords = topFieldText.split(' ');
     const bottomCaptionWords = bottomFieldText.split(' ');
     
     let topCaptionLines = splitIntoLines(topCaptionWords);
     let bottomCaptionLines = splitIntoLines(bottomCaptionWords);
     
-    let margin = 50;
-    let marginBottom = 50;
+    let currentLineTopMargin = lineHeight - topCaptionLines.length * 6;
+    let currentRowBottomMargin = lineHeight - bottomCaptionLines.length * 6;
     
     topCaptionLines.forEach((line) => {
       if (!line) return;
       
-      drawLine(line, margin);
-      margin += 50;
+      this.context.save();
+      drawLine(line, currentLineTopMargin);
+      currentLineTopMargin += lineHeight - topCaptionLines.length * 6;
     });
     
-    marginBottom *= bottomCaptionLines.length;
+    currentRowBottomMargin *= bottomCaptionLines.length + 1;
     
     bottomCaptionLines.forEach((line) => {
       if (!line) return;
 
-      drawLine(line, W.сanvasElement.height + 34 - marginBottom);
-      marginBottom -= 50
-    })
+      drawLine(line, W.сanvasElement.height + 34 - currentRowBottomMargin);
+      currentRowBottomMargin -= lineHeight - topCaptionLines.length * 6;
+    });
+
+    this.updateCaptionsFontSize(topCaptionLines);
   },
 
   drawScene: function() {
@@ -105,12 +114,13 @@ var W = {
   },
 }
 
-W.context.textAlign = 'center';
-W.context.fillStyle = '#fff';
-W.context.font = '48px ImpactRegular';
-W.context.lineWidth = 10;
+W.context.fillStyle   = '#fff';
+W.context.lineWidth   = 10;
+W.context.lineJoin    = 'round';
 W.context.strokeStyle = '#000';
-W.context.lineJoin = 'round';
+W.context.textAlign   = 'center';
+
+W.context.save();
 
 var img1 = new AppImage('https://placehold.jp/500x500.png', 0, 0);
 
@@ -128,3 +138,4 @@ templates.forEach(template => {
 W.fileInput.addEventListener('change', W.uploadFile, false);
 W.topTextField.addEventListener('input', () => W.drawScene(), false);
 W.bottomTextField.addEventListener('input', () => W.drawScene(), false);
+

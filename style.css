@@ -5,7 +5,7 @@
 
 @font-face {
   font-family: "ImpactRegular";
-  src: url(fonts/ImpactRegular.woff) format("truetype");
+  src: url("fonts/ImpactRegular.woff") format("truetype");
   font-style: normal;
   font-weight: normal;
 }
@@ -20,7 +20,8 @@ body {
 }
 
 #canvas {
-  display: block
+  display: inline;
+  width: 100%;
 }
 
 .clr:after {
@@ -47,9 +48,9 @@ body {
 
 .canvas {
   text-align: center;
-  border-radius: 3px;
   margin: 0 auto;
-  width: 500px;
+  max-width: 500px;
+  padding: 0 32px;
 }
 
 #templates-modal {
