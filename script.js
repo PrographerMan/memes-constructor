@@ -44,13 +44,23 @@ var W = {
 
   updateCaptionsFontSize: function(caption) {
     this.context.font = `${48 - caption.length * 6}px ImpactRegular`;
-    this.maxLineWidth = 20 + caption.length * 6;
+    this.maxLineWidth = 18 + caption.length * 6;
   },
 
   drawCaptions: function(topFieldText, bottomFieldText) {
-    const drawLine = (line, margin) => {
-      this.context.strokeText(line, W.сanvasElement.width / 2, margin);
-      this.context.fillText(line, W.сanvasElement.width / 2, margin);
+    const topCaptionPos = {
+      x: W.сanvasElement.width / 2,
+      y: 60
+    }
+
+    const bottomCaptionPos = {
+      x: W.сanvasElement.width / 2,
+      y: W.сanvasElement.height - 30
+    }
+
+    const drawLine = (line) => {
+      this.context.strokeText(line, 0, 0);
+      this.context.fillText(line, 0, 0);
     }
 
     const splitIntoLines = (words) => {
@@ -71,33 +81,34 @@ var W = {
 
       return lines;
     }
-    
-    const lineHeight = 60;
+
     const topCaptionWords = topFieldText.split(' ');
     const bottomCaptionWords = bottomFieldText.split(' ');
     
     let topCaptionLines = splitIntoLines(topCaptionWords);
     let bottomCaptionLines = splitIntoLines(bottomCaptionWords);
+    const lineHeight = 60 - topCaptionLines.length * 6;
     
-    let currentLineTopMargin = lineHeight - topCaptionLines.length * 6;
-    let currentRowBottomMargin = lineHeight - bottomCaptionLines.length * 6;
-    
+    this.context.save();
+    this.context.translate(topCaptionPos.x, topCaptionPos.y);
     topCaptionLines.forEach((line) => {
       if (!line) return;
       
-      this.context.save();
-      drawLine(line, currentLineTopMargin);
-      currentLineTopMargin += lineHeight - topCaptionLines.length * 6;
+      drawLine(line);
+      this.context.translate(0, lineHeight);
     });
+    this.context.restore();
     
-    currentRowBottomMargin *= bottomCaptionLines.length + 1;
-    
+
+    this.context.save();
+    this.context.translate(bottomCaptionPos.x, bottomCaptionPos.y - (bottomCaptionLines.length * lineHeight) + lineHeight);
     bottomCaptionLines.forEach((line) => {
       if (!line) return;
 
-      drawLine(line, W.сanvasElement.height + 34 - currentRowBottomMargin);
-      currentRowBottomMargin -= lineHeight - topCaptionLines.length * 6;
+      drawLine(line);
+      this.context.translate(0, lineHeight);
     });
+    this.context.restore();
 
     this.updateCaptionsFontSize(topCaptionLines);
   },
