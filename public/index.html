@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Memes Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/styles/style.css">
   </head>
   <body>
     <div id="modal-overlay">
@@ -15,10 +15,18 @@
           <a class="close" href="#">✖</a>
         </div>
         <div id="templates" class="clr">
-		      <a href="#"><img alt="Template" src="images/img1.png"></a>
-		      <a href="#"><img alt="Template" src="images/img2.png"></a>
-          <a href="#"><img alt="Template" src="images/img3.png"></a>
-          <a href="#"><img alt="Template" src="images/img4.png"></a>
+		      <a class="template-image" href="#">
+            <img class="template-image__image" alt="Template" src="assets/images/dog.png">
+          </a>
+		      <a class="template-image" href="#">
+            <img class="template-image__image" alt="Template" src="assets/images/kappa.png">
+          </a>
+          <a class="template-image" href="#">
+            <img class="template-image__image" alt="Template" src="assets/images/pepe.png">
+          </a>
+          <a class="template-image" href="#">
+            <img class="template-image__image" alt="Template" src="assets/images/wtf_guy.png">
+          </a>
         </div>
       </div>
     </div>
@@ -36,6 +44,6 @@
         <input id="text2" type="text" placeholder="Нижний заголовок">
       </div>
     </div>
-    <script src="script.js"></script>
+    <script src="assets/scripts/index.js"></script>
   </body>
 </html>

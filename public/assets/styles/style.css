@@ -5,7 +5,7 @@
 
 @font-face {
   font-family: "ImpactRegular";
-  src: url("fonts/ImpactRegular.woff") format("truetype");
+  src: url("../fonts/ImpactRegular.woff") format("truetype");
   font-style: normal;
   font-weight: normal;
 }

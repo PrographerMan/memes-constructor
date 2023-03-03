@@ -1,0 +1,26 @@
+{
+  "name": "memes-constructor",
+  "version": "1.0.0",
+  "description": "Simple canvas based generator of picture with text",
+  "main": "app.js",
+  "scripts": {
+    "dev": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PrographerMan/memes-constructor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PrographerMan/memes-constructor/issues"
+  },
+  "homepage": "https://github.com/PrographerMan/memes-constructor#readme",
+  "devDependencies": {
+    "path": "^0.12.7",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
+}
